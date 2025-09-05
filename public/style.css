@@ -66,20 +66,21 @@ a {
 
 /* Main Container */
 .container {
-    flex: 1; /* Faz o container principal ocupar o espaço restante */
+    flex: 1;
+    width: 100%;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1.5rem;
-    display: flex; /* Para centralizar o grid */
+    display: flex;
     justify-content: center;
-    align-items: flex-start; /* Alinha o grid ao topo do container */
+    align-items: flex-start;
 }
 
 /* Grid de Opções */
 .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem; /* Espaçamento entre os cards */
+    gap: 2rem;
     width: 100%;
 }
 
@@ -97,17 +98,16 @@ a {
 }
 
 .option-card:hover {
-    transform: translateY(-8px); /* Efeito de elevação ao passar o mouse */
+    transform: translateY(-8px);
     box-shadow: 0 10px 25px var(--shadow-hover);
     border-color: var(--primary-color);
 }
 
-.option-card img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain; /* Garante que a imagem se ajuste */
+.option-card .icon {
+    width: 60px;
+    height: 60px;
     margin-bottom: 1.2rem;
-    border-radius: 8px; /* Borda levemente arredondada para as imagens */
+    color: var(--primary-color);
 }
 
 .option-card h3 {
@@ -129,7 +129,7 @@ a {
     color: #fff;
     text-align: center;
     padding: 1.5rem;
-    margin-top: auto; /* Empurra o footer para o final da página */
+    margin-top: auto;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -138,7 +138,7 @@ a {
     opacity: 0.8;
 }
 
-/* Animações (opcional, para um toque extra) */
+/* Animações */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -155,49 +155,18 @@ a {
     .main-header {
         padding: 2rem 1rem;
     }
-
     .app-title {
         font-size: 2.2rem;
     }
-
     .app-tagline {
         font-size: 1rem;
     }
-
     .container {
         margin: 1.5rem auto;
         padding: 0 1rem;
     }
-
     .options-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Colunas menores em telas menores */
+        grid-template-columns: 1fr;
         gap: 1.5rem;
-    }
-
-    .option-card {
-        padding: 1.5rem;
-    }
-
-    .option-card h3 {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-header {
-        padding: 1.5rem 0.8rem;
-    }
-
-    .app-title {
-        font-size: 1.8rem;
-    }
-
-    .app-tagline {
-        font-size: 0.9rem;
-    }
-
-    .options-grid {
-        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
-        gap: 1rem;
     }
 }

@@ -7,117 +7,132 @@ const app = express();
 const port = 3000;
 
 let db;
+
 async function setupDatabase() {
   db = await sqlite.open({
     filename: './database.db',
     driver: sqlite3.Database
   });
-
   console.log('Conectado ao banco de dados SQLite.');
 
-  // Mantém a tabela antiga se existir
   await db.exec(`
-    CREATE TABLE IF NOT EXISTS itens (
+    CREATE TABLE IF NOT EXISTS ativos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT,
-      localizacao TEXT,
-      status TEXT
-    );
-  `);
-
-  // Cria as novas tabelas para estações de trabalho
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS estacoes_trabalho (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      computador_nome TEXT,
-      computador_patrimonio TEXT,
-      computador_rfid TEXT,
-      computador_serial TEXT,
-      computador_marca TEXT,
-      teclado BOOLEAN,
-      mouse BOOLEAN,
-      headset BOOLEAN,
-      mousepad BOOLEAN,
-      suporte_headset BOOLEAN,
-      webcam BOOLEAN,
-      local TEXT,
-      setor TEXT,
-      data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS monitores (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      estacao_id INTEGER,
+      tipo TEXT NOT NULL,
+      nome_ativo TEXT,
       patrimonio TEXT,
       rfid TEXT,
       serial TEXT,
-      marca TEXT,
-      FOREIGN KEY (estacao_id) REFERENCES estacoes_trabalho(id) ON DELETE CASCADE
+      marca_modelo TEXT,
+      local TEXT,
+      setor TEXT,
+      ativo_pai_id INTEGER,
+      dados_especificos TEXT,
+      data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (ativo_pai_id) REFERENCES ativos(id) ON DELETE SET NULL
     );
   `);
-  
-  console.log('Tabelas de estações de trabalho e monitores prontas.');
+  console.log('Tabela "ativos" pronta.');
 }
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Rotas de API ---
-
-// Rota para adicionar uma nova estação de trabalho
-app.post('/api/estacao', async (req, res) => {
-  const { computador, monitores, perifericos, localizacao } = req.body;
+// ROTA DE CRIAÇÃO (POST)
+app.post('/api/ativos', async (req, res) => {
+  const { tipo, dados } = req.body;
+  // ... (código existente para criar ativos)
+  if (!tipo || !dados) {
+    return res.status(400).json({ error: 'Tipo e dados do ativo são obrigatórios.' });
+  }
 
   try {
-    // Inicia a transação
     await db.exec('BEGIN TRANSACTION');
+    let ativoPaiId = null;
 
-    const estacaoResult = await db.run(
-      `INSERT INTO estacoes_trabalho (
-        computador_nome, computador_patrimonio, computador_rfid, computador_serial, computador_marca,
-        teclado, mouse, headset, mousepad, suporte_headset, webcam,
-        local, setor
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        computador.nome, computador.patrimonio, computador.rfid, computador.serial, computador.marca,
-        perifericos.teclado, perifericos.mouse, perifericos.headset, perifericos.mousepad, perifericos.suporte_headset, perifericos.webcam,
-        localizacao.local, localizacao.setor
-      ]
-    );
+    if (tipo === 'Estação de Trabalho') {
+      const { computador, monitores, perifericos, localizacao } = dados;
+      const result = await db.run(
+        `INSERT INTO ativos (tipo, nome_ativo, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [ 'Estação de Trabalho', computador.nome, computador.patrimonio, computador.rfid, computador.serial, computador.marca, localizacao.local, localizacao.setor, JSON.stringify({ perifericos }) ]
+      );
+      ativoPaiId = result.lastID;
 
-    const estacaoId = estacaoResult.lastID;
-
-    if (monitores && monitores.length > 0) {
-      const stmt = await db.prepare('INSERT INTO monitores (estacao_id, patrimonio, rfid, serial, marca) VALUES (?, ?, ?, ?, ?)');
-      for (const monitor of monitores) {
-        await stmt.run(estacaoId, monitor.patrimonio, monitor.rfid, monitor.serial, monitor.marca);
+      if (monitores && monitores.length > 0) {
+        const stmt = await db.prepare(`INSERT INTO ativos (tipo, patrimonio, rfid, serial, marca_modelo, ativo_pai_id) VALUES ('Monitor', ?, ?, ?, ?, ?)`);
+        for (const monitor of monitores) {
+          if (Object.values(monitor).some(val => val && val.trim() !== '')) {
+            await stmt.run(monitor.patrimonio, monitor.rfid, monitor.serial, monitor.marca, ativoPaiId);
+          }
+        }
+        await stmt.finalize();
       }
-      await stmt.finalize();
+    } else {
+      const { nome, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos } = dados;
+      const result = await db.run(
+        `INSERT INTO ativos (tipo, nome_ativo, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [tipo, nome, patrimonio, rfid, serial, marca_modelo, local, setor, JSON.stringify(dados_especificos || {})]
+      );
+      ativoPaiId = result.lastID;
     }
-    
-    // Finaliza a transação
-    await db.exec('COMMIT');
 
-    res.status(201).json({ id: estacaoId, message: 'Estação de trabalho cadastrada com sucesso!' });
+    await db.exec('COMMIT');
+    res.status(201).json({ id: ativoPaiId, message: `Ativo do tipo "${tipo}" cadastrado com sucesso!` });
 
   } catch (err) {
-    // Em caso de erro, desfaz a transação
     await db.exec('ROLLBACK');
-    console.error('Erro no cadastro:', err.message);
-    res.status(500).json({ error: 'Erro ao cadastrar a estação de trabalho.' });
+    console.error('Erro no cadastro do ativo:', err.message);
+    res.status(500).json({ error: 'Erro ao cadastrar o ativo.' });
   }
 });
 
+// --- NOVA ROTA DE ATUALIZAÇÃO (PUT) ---
+app.put('/api/ativos/:id', async (req, res) => {
+    const { id } = req.params;
+    const dados = req.body;
 
-// Rota antiga para listar itens (pode ser mantida ou removida)
-app.get('/api/itens', async (req, res) => {
+    try {
+        // Atualiza os campos principais
+        await db.run(
+            `UPDATE ativos SET
+                nome_ativo = ?,
+                patrimonio = ?,
+                rfid = ?,
+                serial = ?,
+                marca_modelo = ?,
+                local = ?,
+                setor = ?,
+                dados_especificos = ?
+            WHERE id = ?`,
+            [
+                dados.nome_ativo,
+                dados.patrimonio,
+                dados.rfid,
+                dados.serial,
+                dados.marca_modelo,
+                dados.local,
+                dados.setor,
+                JSON.stringify(dados.dados_especificos || {}),
+                id
+            ]
+        );
+        res.status(200).json({ message: 'Ativo atualizado com sucesso!' });
+    } catch (err) {
+        console.error('Erro na atualização do ativo:', err.message);
+        res.status(500).json({ error: 'Erro ao atualizar o ativo.' });
+    }
+});
+
+
+// ROTA DE LEITURA (GET)
+app.get('/api/ativos', async (req, res) => {
   try {
-    const itens = await db.all('SELECT * FROM itens');
-    res.json(itens);
+    const ativos = await db.all('SELECT * FROM ativos ORDER BY data_cadastro DESC');
+    res.json(ativos);
   } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar itens.' });
+    res.status(500).json({ error: 'Erro ao buscar ativos.' });
   }
 });
 
@@ -129,3 +144,4 @@ async function startServer() {
 }
 
 startServer();
+

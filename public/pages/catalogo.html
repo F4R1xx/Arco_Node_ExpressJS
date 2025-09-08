@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Ativos - Arco TI</title>
+    <link rel="stylesheet" href="./css/catalogo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <a href="/index.html" class="back-link"><i data-lucide="arrow-left"></i><span>Painel Principal</span></a>
+        </header>
+
+        <main class="catalog-main">
+            <h1>Catálogo de Ativos</h1>
+            <p class="margin">Visualize e gerencie todos os ativos cadastrados no inventário.</p>
+
+            <div class="toolbar">
+                <div class="search-wrapper">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="search-input" placeholder="Pesquisar por nome, patrimônio, serial...">
+                </div>
+                <div class="filter-wrapper">
+                    <select id="filter-tipo">
+                        <option value="todos">Todos os Tipos</option>
+                        <option value="Estação de Trabalho">Estação de Trabalho</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Telefone">Telefone</option>
+                        <option value="Câmera">Câmera</option>
+                        <option value="Switch">Switch</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="asset-list-container">
+                <div class="asset-list-header">
+                    <div class="col-tipo">Tipo</div>
+                    <div class="col-nome">Nome / Identificador</div>
+                    <div class="col-local">Localização</div>
+                    <div class="col-patrimonio">Patrimônio</div>
+                    <div class="col-actions"></div>
+                </div>
+                <div id="asset-list" class="asset-list">
+                    <div id="loading-spinner" class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                <p id="no-results" class="no-results-message" hidden>Nenhum ativo encontrado.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Detalhes e Edição do Ativo -->
+    <div id="modal-container" class="modal-container" hidden>
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal-btn"><i data-lucide="x"></i></button>
+            <div id="modal-body">
+                <!-- Conteúdo do modal (visualização ou formulário) -->
+            </div>
+            <div id="modal-actions" class="modal-actions">
+                <!-- Botões de ação (Editar, Salvar, Cancelar) -->
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/catalogo.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

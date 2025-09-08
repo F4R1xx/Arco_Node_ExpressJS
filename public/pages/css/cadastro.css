@@ -1,39 +1,38 @@
 /* ==========================================================================
-   DESIGN SYSTEM V5: HIGH CONTRAST & PROFESSIONAL PALETTE
+   DESIGN SYSTEM V8: CLEAN, BRIGHT & BORDERLESS
    ========================================================================== */
 :root {
-    /* Paleta de Cores Refinada para Contraste e Clareza */
-    --color-bg: #c4c5c5; /* Cinza muito claro, quase branco, para um fundo limpo */
-    --color-surface: #ffffff; /* Branco puro para os cards */
-    --color-input-bg: #f3f4f6; /* Um cinza sutilmente mais escuro para inputs */
-    --color-text-primary: #111827; /* Preto forte para máxima legibilidade */
-    --color-text-secondary: #4b5563; /* Cinza escuro para textos secundários, com bom contraste */
-    --color-text-placeholder: #9ca3af; /* Cinza médio para placeholders */
-    --color-accent: #026DE5; /* Um azul profissional, acessível e moderno */
-    --color-accent-hover: #0059C2; /* Azul um pouco mais escuro para hover */
-    --color-focus-ring: rgba(2, 109, 229, 0.3); /* Anel de foco azulado */
-    --color-danger: #dc2626; /* Vermelho forte para ações destrutivas */
-    --color-danger-bg: #fee2e2; /* Fundo vermelho claro para hover */
+    /* Paleta de Cores: Clara, profissional e com alto contraste */
+    --color-bg: #f7f8fc;
+    --color-surface: #ffffff;
+    --color-input-bg: #f0f1f5;
+    --color-text-primary: #2d3748;
+    --color-text-secondary: #718096;
+    --color-text-placeholder: #a0aec0;
+    --color-accent: #3182ce; /* Azul corporativo e acessível */
+    --color-accent-hover: #2b6cb0;
+    --color-focus-ring: rgba(49, 130, 206, 0.3);
+    --color-danger: #e53e3e;
+    --color-danger-bg: #fed7d7;
 
-    /* Tipografia (Mantida) */
+    /* Tipografia */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-    /* Sombras e Bordas (Ajustadas para sutileza) */
-    --border-radius-md: 10px;
-    --border-radius-lg: 20px;
-    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 15px 30px -5px rgba(0, 0, 0, 0.07);
+    /* Sombras e Bordas */
+    --border-radius-md: 12px;
+    --border-radius-lg: 24px;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
 
     /* Transições */
-    --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
    RESET E CONFIGURAÇÕES GLOBAIS
    ========================================================================== */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -48,7 +47,7 @@ body {
 }
 
 /* ==========================================================================
-   LAYOUT PRINCIPAL E CONTAINER
+   LAYOUT PRINCIPAL
    ========================================================================== */
 .page-container {
     display: flex;
@@ -56,13 +55,13 @@ body {
     align-items: flex-start;
     width: 100%;
     min-height: 100vh;
-    padding: 4rem 1rem;
+    padding: 4rem 1.5rem;
 }
 
 .form-wrapper {
     width: 100%;
-    max-width: 720px;
-    background-color: var(--color-surface);
+    max-width: 768px;
+    background: var(--color-surface);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
@@ -70,22 +69,15 @@ body {
 }
 
 @keyframes fadeIn-scaleUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ==========================================================================
-   CABEÇALHO DO FORMULÁRIO
+   CABEÇALHO
    ========================================================================== */
 .form-header {
-    padding: 3rem 2.5rem 1rem 2.5rem;
-    text-align: left;
+    padding: 3rem 3rem 2rem 3rem;
     position: relative;
 }
 
@@ -94,27 +86,21 @@ body {
     align-items: center;
     gap: 0.4rem;
     position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
-    background-color: var(--color-input-bg);
+    top: 2rem;
+    left: 2rem;
+    background-color: var(--color-bg);
     color: var(--color-text-secondary);
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
-    padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 9999px;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-smooth);
 }
 
 .back-link:hover {
-    background-color: #e5e7eb;
+    background-color: #e2e8f0;
     color: var(--color-text-primary);
-    transform: scale(1.05);
-}
-
-.back-link .lucide {
-    width: 16px;
-    height: 16px;
 }
 
 .form-header h1 {
@@ -122,110 +108,120 @@ body {
     font-weight: 800;
     letter-spacing: -0.8px;
     margin-bottom: 0.75rem;
-    padding-top: 2rem;
+    padding-top: 2.5rem;
 }
 
 .form-header p {
     color: var(--color-text-secondary);
     font-size: 1.125rem;
     line-height: 1.6;
+    max-width: 95%;
 }
 
 /* ==========================================================================
-   SEÇÕES E CAMPOS DO FORMULÁRIO
+   SEÇÕES E CAMPOS (SEM LINHAS DIVISÓRIAS)
    ========================================================================== */
 .form-section {
-    padding: 2rem 2.5rem;
+    padding: 1.5rem 3rem; /* Padding vertical reduzido aqui */
     border: 0;
 }
 
+/* A separação é feita com padding e espaçamento aumentado */
 .form-section + .form-section {
-    padding-top: 3rem;
+    padding-top: 2.5rem;
 }
 
 .form-section legend {
-    font-size: 0.875rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.75rem;
+    color: var(--color-text-primary);
 }
 
 .fields-grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
-
-.fields-grid.two-columns {
-    grid-template-columns: 1fr;
-}
-
-.form-group.full-width {
-    grid-column: 1 / -1;
-}
+.fields-grid.two-columns { grid-template-columns: 1fr; }
+.form-group.full-width { grid-column: 1 / -1; }
 
 .form-group label {
     display: block;
-    margin: 0.625rem;
+    margin-bottom: 0.6rem;
     font-weight: 500;
     font-size: 0.875rem;
 }
 
-.form-group input[type="text"] {
+.form-group input[type="text"],
+.form-group select {
     width: 100%;
-    padding: 1rem;
+    padding: 1rem 1.25rem;
     border: none;
     border-radius: var(--border-radius-md);
     font-size: 1rem;
     font-family: var(--font-family);
     background-color: var(--color-input-bg);
-    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    color: var(--color-text-primary);
+    transition: all var(--transition-smooth);
+    box-shadow: var(--shadow-sm);
+}
+
+.form-group select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23718096' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 3.5rem;
+    appearance: none; -webkit-appearance: none;
 }
 
 .form-group input[type="text"]::placeholder {
     color: var(--color-text-placeholder);
 }
 
-.form-group input[type="text"]:focus {
+.form-group input[type="text"]:focus,
+.form-group select:focus {
     outline: none;
     background-color: var(--color-surface);
-    box-shadow: 0 0 0 3px var(--color-focus-ring), 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 0 0 3px var(--color-focus-ring), var(--shadow-md);
+}
+
+/* Animação suave para seções dinâmicas */
+.form-secoes-dinamicas:not([hidden]) {
+    animation: fadeIn 0.5s var(--transition-smooth) forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ==========================================================================
-   SEÇÃO DE MONITORES
+   COMPONENTES (MONITORES, PERIFÉRICOS)
    ========================================================================== */
 #monitores-container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .monitor-entry {
     background-color: var(--color-input-bg);
-    border-radius: var(--border-radius-md);
-    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
     position: relative;
-    animation: fadeIn 0.4s ease-out;
 }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
 .monitor-entry .form-group input[type="text"] {
     background-color: var(--color-surface);
 }
 
-.monitor-entry .form-group input[type="text"]:focus {
-    box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
 .remove-monitor-btn {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: transparent;
-    color: var(--color-text-placeholder);
+    top: 1rem;
+    right: 1rem;
+    color: var(--color-text-secondary);
     border: none;
+    background: transparent;
     border-radius: 50%;
     width: 32px;
     height: 32px;
@@ -233,27 +229,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-smooth);
 }
 
 .remove-monitor-btn:hover {
     background-color: var(--color-danger-bg);
     color: var(--color-danger);
-    transform: rotate(90deg) scale(1.1);
+    transform: scale(1.1);
 }
 
-/* ==========================================================================
-   SEÇÃO DE PERIFÉRICOS
-   ========================================================================== */
 .perifericos-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
 }
 
-.checkbox-tag input[type="checkbox"] {
-    display: none;
-}
+.checkbox-tag input[type="checkbox"] { display: none; }
 
 .checkbox-tag label {
     display: flex;
@@ -263,22 +254,21 @@ body {
     background-color: var(--color-input-bg);
     border-radius: var(--border-radius-md);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-smooth);
     font-weight: 500;
     font-size: 0.875rem;
+    box-shadow: var(--shadow-sm);
 }
 
 .checkbox-tag label:hover {
     transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-md);
 }
 
 .checkbox-tag input[type="checkbox"]:checked + label {
     background-color: var(--color-accent);
     color: white;
-    box-shadow: 0 4px 10px -2px rgba(2, 109, 229, 0.3);
 }
-
 .checkbox-tag input[type="checkbox"]:checked + label .lucide {
     color: white;
 }
@@ -293,7 +283,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-smooth);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -308,26 +298,24 @@ body {
 
 .btn-primary:hover {
     background-color: var(--color-accent-hover);
-    box-shadow: 0 10px 20px -5px rgba(2, 109, 229, 0.3);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-3px);
 }
 
 .btn-secondary {
     background-color: var(--color-input-bg);
     color: var(--color-text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
-    background-color: #e5e7eb;
+    background-color: #e2e8f0;
 }
 
-#add-monitor-btn {
-    margin-top: 1.5rem;
-}
+#add-monitor-btn { margin-top: 1.5rem; }
 
 .form-footer {
-    padding: 2rem 2.5rem;
-    background-color: var(--color-surface);
+    padding: 3rem 3rem 2rem 3rem;
     display: flex;
     justify-content: flex-end;
 }
@@ -336,12 +324,7 @@ body {
    RESPONSIVIDADE
    ========================================================================== */
 @media (min-width: 640px) {
-    .fields-grid.two-columns {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .monitor-entry .fields-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+    .fields-grid.two-columns { grid-template-columns: 1fr 1fr; }
+    .monitor-entry .fields-grid { grid-template-columns: 1fr 1fr; }
 }
 

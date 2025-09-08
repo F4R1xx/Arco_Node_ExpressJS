@@ -3,68 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Gerenciamento de Ativos</title>
+    <title>Painel - Gestão de TI</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="app-title">Gerenciamento de Ativos de TI</h1>
-            <p class="app-tagline">Sua plataforma completa para organização e controle</p>
-        </div>
-    </header>
+    <div class="app-layout">
+        <!-- Barra de Navegação Lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="shield-check" class="logo-icon"></i>
+                <h2 class="logo-text">Arco TI</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Painel</span>
+                </a>
+                <a href="/pages/catalogo.html" class="nav-item">
+                    <i data-lucide="library"></i>
+                    <span>Catálogo de Ativos</span>
+                </a>
+                <a href="/pages/cadastro.html" class="nav-item">
+                    <i data-lucide="plus-circle"></i>
+                    <span>Adicionar Ativo</span>
+                </a>
+                <a href="/pages/local.html" class="nav-item">
+                    <i data-lucide="map-pin"></i>
+                    <span>Gerenciar Locais</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>&copy; 2024 Arco TI</p>
+            </div>
+        </aside>
 
-    <main class="container">
-        <section class="options-grid">
-            <a href="/pages/cadastro.html" class="option-card">
-                <i data-lucide="hard-drive-upload" class="icon"></i>
-                <h3>Cadastrar Estação de Trabalho</h3>
-                <p>Adicione novas estações de trabalho e seus periféricos.</p>
-            </a>
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Painel de Gestão</h1>
+                <p>Bem-vindo! Selecione uma das opções abaixo para começar.</p>
+            </header>
 
-            <a href="#" class="option-card">
-                <i data-lucide="move-right-left" class="icon"></i>
-                <h3>Movimentação de Itens</h3>
-                <p>Registre a entrada e saída de ativos.</p>
-            </a>
+            <div class="dashboard-grid">
+                <section class="grid-section">
+                    <h2 class="section-title">Operações Essenciais</h2>
+                    <div class="options-grid">
+                        <a href="/pages/cadastro.html" class="option-card">
+                            <i data-lucide="plus-circle" class="icon"></i>
+                            <h3>Cadastrar Novo Ativo</h3>
+                            <p>Adicione computadores, telefones e outros equipamentos.</p>
+                        </a>
+                        <a href="/pages/catalogo.html" class="option-card">
+                            <i data-lucide="library" class="icon"></i>
+                            <h3>Catálogo de Ativos</h3>
+                            <p>Visualize, pesquise e edite todos os itens do inventário.</p>
+                        </a>
+                        <a href="#" class="option-card disabled">
+                            <i data-lucide="move-right-left" class="icon"></i>
+                            <h3>Movimentar Ativos</h3>
+                            <p>Registre a transferência de equipamentos entre locais e setores.</p>
+                        </a>
+                    </div>
+                </section>
 
-            <a href="#" class="option-card">
-                <i data-lucide="archive" class="icon"></i>
-                <h3>Aposento de Itens</h3>
-                <p>Gerencie o descarte ou arquivamento de ativos.</p>
-            </a>
-
-            <a href="#" class="option-card">
-                <i data-lucide="map" class="icon"></i>
-                <h3>Visualização no Mapa</h3>
-                <p>Veja a localização física de seus ativos.</p>
-            </a>
-
-            <a href="#" class="option-card">
-                <i data-lucide="bar-chart-2" class="icon"></i>
-                <h3>Relatórios e Análises</h3>
-                <p>Acesse dados e gráficos sobre seus ativos.</p>
-            </a>
-
-            <a href="#" class="option-card">
-                <i data-lucide="settings" class="icon"></i>
-                <h3>Configurações</h3>
-                <p>Ajuste as preferências da plataforma.</p>
-            </a>
-
-            <a href="/pages/catalogo.html" class="option-card">
-                <i data-lucide="archive" class="icon"></i>
-                <h3>Catálogo de itens</h3>
-                <p>Veja todos os itens da unidade.</p>
-            </a>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <p>&copy; 2024 Plataforma de Gerenciamento. Todos os direitos reservados.</p>
-    </footer>
+                <section class="grid-section">
+                    <h2 class="section-title">Gestão e Configurações</h2>
+                    <div class="options-grid">
+                         <a href="/pages/local.html" class="option-card">
+                            <i data-lucide="map-pin" class="icon"></i>
+                            <h3>Gerenciar Locais</h3>
+                            <p>Adicione ou visualize as unidades e prédios da organização.</p>
+                        </a>
+                        <a href="#" class="option-card disabled">
+                            <i data-lucide="bar-chart-3" class="icon"></i>
+                            <h3>Relatórios</h3>
+                            <p>Gere relatórios e análises sobre o estado do seu inventário.</p>
+                        </a>
+                        <a href="#" class="option-card disabled">
+                            <i data-lucide="settings" class="icon"></i>
+                            <h3>Configurações</h3>
+                            <p>Ajuste as preferências e parâmetros gerais do sistema.</p>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
     <script>
         lucide.createIcons();
     </script>

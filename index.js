@@ -17,124 +17,86 @@ async function setupDatabase() {
 
   await db.exec(`
     CREATE TABLE IF NOT EXISTS ativos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      tipo TEXT NOT NULL,
-      nome_ativo TEXT,
-      patrimonio TEXT,
-      rfid TEXT,
-      serial TEXT,
-      marca_modelo TEXT,
-      local TEXT,
-      setor TEXT,
-      ativo_pai_id INTEGER,
-      dados_especificos TEXT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT NOT NULL, nome_ativo TEXT,
+      patrimonio TEXT, rfid TEXT, serial TEXT, marca_modelo TEXT, local TEXT,
+      setor TEXT, ativo_pai_id INTEGER, dados_especificos TEXT,
       data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (ativo_pai_id) REFERENCES ativos(id) ON DELETE SET NULL
     );
   `);
-  console.log('Tabela "ativos" pronta.');
+  
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS locais (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL UNIQUE
+    );
+  `);
+  
+  console.log('Tabelas "ativos" e "locais" prontas.');
 }
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ROTA DE CRIAÇÃO (POST)
-app.post('/api/ativos', async (req, res) => {
-  const { tipo, dados } = req.body;
-  // ... (código existente para criar ativos)
-  if (!tipo || !dados) {
-    return res.status(400).json({ error: 'Tipo e dados do ativo são obrigatórios.' });
-  }
+// --- ROTAS DE API PARA LOCAIS ---
 
-  try {
-    await db.exec('BEGIN TRANSACTION');
-    let ativoPaiId = null;
-
-    if (tipo === 'Estação de Trabalho') {
-      const { computador, monitores, perifericos, localizacao } = dados;
-      const result = await db.run(
-        `INSERT INTO ativos (tipo, nome_ativo, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [ 'Estação de Trabalho', computador.nome, computador.patrimonio, computador.rfid, computador.serial, computador.marca, localizacao.local, localizacao.setor, JSON.stringify({ perifericos }) ]
-      );
-      ativoPaiId = result.lastID;
-
-      if (monitores && monitores.length > 0) {
-        const stmt = await db.prepare(`INSERT INTO ativos (tipo, patrimonio, rfid, serial, marca_modelo, ativo_pai_id) VALUES ('Monitor', ?, ?, ?, ?, ?)`);
-        for (const monitor of monitores) {
-          if (Object.values(monitor).some(val => val && val.trim() !== '')) {
-            await stmt.run(monitor.patrimonio, monitor.rfid, monitor.serial, monitor.marca, ativoPaiId);
-          }
-        }
-        await stmt.finalize();
-      }
-    } else {
-      const { nome, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos } = dados;
-      const result = await db.run(
-        `INSERT INTO ativos (tipo, nome_ativo, patrimonio, rfid, serial, marca_modelo, local, setor, dados_especificos)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [tipo, nome, patrimonio, rfid, serial, marca_modelo, local, setor, JSON.stringify(dados_especificos || {})]
-      );
-      ativoPaiId = result.lastID;
-    }
-
-    await db.exec('COMMIT');
-    res.status(201).json({ id: ativoPaiId, message: `Ativo do tipo "${tipo}" cadastrado com sucesso!` });
-
-  } catch (err) {
-    await db.exec('ROLLBACK');
-    console.error('Erro no cadastro do ativo:', err.message);
-    res.status(500).json({ error: 'Erro ao cadastrar o ativo.' });
-  }
-});
-
-// --- NOVA ROTA DE ATUALIZAÇÃO (PUT) ---
-app.put('/api/ativos/:id', async (req, res) => {
-    const { id } = req.params;
-    const dados = req.body;
-
+app.get('/api/locais', async (req, res) => {
     try {
-        // Atualiza os campos principais
-        await db.run(
-            `UPDATE ativos SET
-                nome_ativo = ?,
-                patrimonio = ?,
-                rfid = ?,
-                serial = ?,
-                marca_modelo = ?,
-                local = ?,
-                setor = ?,
-                dados_especificos = ?
-            WHERE id = ?`,
-            [
-                dados.nome_ativo,
-                dados.patrimonio,
-                dados.rfid,
-                dados.serial,
-                dados.marca_modelo,
-                dados.local,
-                dados.setor,
-                JSON.stringify(dados.dados_especificos || {}),
-                id
-            ]
-        );
-        res.status(200).json({ message: 'Ativo atualizado com sucesso!' });
+        const locais = await db.all('SELECT * FROM locais ORDER BY nome');
+        res.json(locais);
     } catch (err) {
-        console.error('Erro na atualização do ativo:', err.message);
-        res.status(500).json({ error: 'Erro ao atualizar o ativo.' });
+        res.status(500).json({ error: 'Erro ao buscar locais.' });
+    }
+});
+
+app.post('/api/locais', async (req, res) => {
+    const { nome } = req.body;
+    if (!nome) {
+        return res.status(400).json({ error: 'O nome do local é obrigatório.' });
+    }
+    try {
+        const result = await db.run('INSERT INTO locais (nome) VALUES (?)', [nome]);
+        res.status(201).json({ id: result.lastID, nome });
+    } catch (err) {
+        if (err.code === 'SQLITE_CONSTRAINT') {
+            return res.status(409).json({ error: 'Este local já existe.' });
+        }
+        res.status(500).json({ error: 'Erro ao adicionar o local.' });
+    }
+});
+
+// --- NOVA ROTA DE EXCLUSÃO (DELETE) ---
+app.delete('/api/locais/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Primeiro, verifica se o local está em uso por algum ativo
+        const local = await db.get('SELECT nome FROM locais WHERE id = ?', [id]);
+        if (!local) {
+            return res.status(404).json({ error: 'Local não encontrado.' });
+        }
+
+        const ativoUsando = await db.get('SELECT id FROM ativos WHERE local = ?', [local.nome]);
+        if (ativoUsando) {
+            return res.status(400).json({ error: 'Este local não pode ser apagado pois está em uso por um ou mais ativos.' });
+        }
+
+        // Se não estiver em uso, apaga o local
+        await db.run('DELETE FROM locais WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Local apagado com sucesso!' });
+
+    } catch (err) {
+        console.error("Erro ao apagar local:", err.message);
+        res.status(500).json({ error: 'Erro ao apagar o local.' });
     }
 });
 
 
-// ROTA DE LEITURA (GET)
-app.get('/api/ativos', async (req, res) => {
-  try {
-    const ativos = await db.all('SELECT * FROM ativos ORDER BY data_cadastro DESC');
-    res.json(ativos);
-  } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar ativos.' });
-  }
-});
+// --- ROTAS DE ATIVOS (sem alteração) ---
+// (Coloque aqui as suas rotas POST, PUT, e GET para /api/ativos)
+app.post('/api/ativos', async (req, res) => { /* ... código existente ... */ });
+app.put('/api/ativos/:id', async (req, res) => { /* ... código existente ... */ });
+app.get('/api/ativos', async (req, res) => { /* ... código existente ... */ });
+
 
 async function startServer() {
   await setupDatabase();

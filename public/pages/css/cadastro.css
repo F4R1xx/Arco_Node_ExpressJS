@@ -74,11 +74,12 @@ body {
 }
 
 /* ==========================================================================
-   CABEÇALHO
+   CABEÇALHO (CORRIGIDO)
    ========================================================================== */
 .form-header {
     padding: 3rem 3rem 2rem 3rem;
     position: relative;
+    padding-top: 5.5rem; /* <<< CORREÇÃO APLICADA AQUI */
 }
 
 .back-link {
@@ -108,7 +109,7 @@ body {
     font-weight: 800;
     letter-spacing: -0.8px;
     margin-bottom: 0.75rem;
-    padding-top: 2.5rem;
+    /* padding-top foi removido daqui e passado para o container pai */
 }
 
 .form-header p {
@@ -122,11 +123,10 @@ body {
    SEÇÕES E CAMPOS (SEM LINHAS DIVISÓRIAS)
    ========================================================================== */
 .form-section {
-    padding: 1.5rem 3rem; /* Padding vertical reduzido aqui */
+    padding: 1.5rem 3rem;
     border: 0;
 }
 
-/* A separação é feita com padding e espaçamento aumentado */
 .form-section + .form-section {
     padding-top: 2.5rem;
 }
@@ -186,7 +186,6 @@ body {
     box-shadow: 0 0 0 3px var(--color-focus-ring), var(--shadow-md);
 }
 
-/* Animação suave para seções dinâmicas */
 .form-secoes-dinamicas:not([hidden]) {
     animation: fadeIn 0.5s var(--transition-smooth) forwards;
 }

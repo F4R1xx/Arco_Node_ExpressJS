@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Locais - Arco TI</title>
+    <link rel="stylesheet" href="./css/local.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <a href="/index.html" class="back-link">
+                <i data-lucide="arrow-left"></i>
+                <span>Painel Principal</span>
+            </a>
+            <h1>Gestão de Locais</h1>
+            <p>Adicione, visualize e gerencie as unidades e prédios da organização.</p>
+        </header>
+
+        <main class="content-wrapper">
+            <!-- Formulário para adicionar novo local -->
+            <div class="card add-location-card">
+                <h2>Adicionar Novo Local</h2>
+                <form id="form-add-local">
+                    <div class="form-group">
+                        <label for="nome-local">Nome do Local</label>
+                        <input type="text" id="nome-local" placeholder="Ex: Escritório São Paulo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="plus-circle"></i>
+                        <span>Adicionar</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Lista de locais existentes -->
+            <div class="card location-list-card">
+                <h2>Locais Cadastrados</h2>
+                <div id="location-list">
+                    <div id="loading-spinner" class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                    <!-- Locais serão inseridos aqui via JS -->
+                </div>
+                <p id="no-locations" class="empty-message" hidden>Nenhum local cadastrado ainda.</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="./js/local.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+

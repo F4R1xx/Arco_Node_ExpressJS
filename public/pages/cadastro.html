@@ -23,7 +23,6 @@
             </header>
 
             <form id="form-cadastro-ativo">
-                <!-- Seletor de Tipo de Ativo -->
                 <fieldset class="form-section">
                     <legend>Tipo de Ativo</legend>
                     <div class="form-group">
@@ -38,7 +37,6 @@
                     </div>
                 </fieldset>
 
-                <!-- Formulário para Estação de Trabalho -->
                 <div id="form-estacao-trabalho" class="form-secoes-dinamicas" hidden>
                     <fieldset class="form-section">
                         <legend>Computador</legend>
@@ -54,7 +52,6 @@
                     <fieldset class="form-section"><legend>Periféricos Inclusos</legend><div class="perifericos-grid"><div class="checkbox-tag"><input type="checkbox" id="teclado" name="teclado"><label for="teclado"><i data-lucide="keyboard"></i>Teclado</label></div><div class="checkbox-tag"><input type="checkbox" id="mouse" name="mouse"><label for="mouse"><i data-lucide="mouse"></i>Mouse</label></div><div class="checkbox-tag"><input type="checkbox" id="headset" name="headset"><label for="headset"><i data-lucide="headphones"></i>Headset</label></div><div class="checkbox-tag"><input type="checkbox" id="mousepad" name="mousepad"><label for="mousepad"><i data-lucide="square"></i>Mousepad</label></div><div class="checkbox-tag"><input type="checkbox" id="suporte-headset" name="suporte-headset"><label for="suporte-headset"><i data-lucide="anchor"></i>Suporte</label></div><div class="checkbox-tag"><input type="checkbox" id="webcam" name="webcam"><label for="webcam"><i data-lucide="video"></i>Webcam</label></div></div></fieldset>
                 </div>
                 
-                <!-- Formulário para Outros Ativos (Genérico) -->
                 <div id="form-outro-ativo" class="form-secoes-dinamicas" hidden>
                     <fieldset class="form-section">
                         <legend>Detalhes do Ativo</legend>
@@ -67,7 +64,6 @@
                         </div>
                     </fieldset>
                     
-                    <!-- Campos extras para Telefone -->
                     <fieldset class="form-section" id="secao-extra-telefone" hidden>
                         <legend>Dados Específicos de Telefone</legend>
                         <div class="fields-grid two-columns">
@@ -77,10 +73,25 @@
                     </fieldset>
                 </div>
 
-                <!-- Seção de Localização (Comum a todos) -->
                 <div id="form-localizacao" class="form-secoes-dinamicas" hidden>
-                    <fieldset class="form-section"><legend>Localização</legend><div class="fields-grid two-columns"><div class="form-group"><label for="local">Prédio / Unidade</label><input type="text" id="local" name="local" placeholder="Ex: Escritório São Paulo"></div><div class="form-group"><label for="setor">Setor / Departamento</label><input type="text" id="setor" name="setor" placeholder="Ex: Financeiro"></div></div></fieldset>
-                    <footer class="form-footer"><button type="submit" class="btn btn-primary">Cadastrar Ativo <i data-lucide="arrow-right"></i></button></footer>
+                    <fieldset class="form-section">
+                        <legend>Localização</legend>
+                        <div class="fields-grid two-columns">
+                            <div class="form-group">
+                                <label for="local">Prédio / Unidade</label>
+                                <select id="local" name="local" required>
+                                    <option value="">Carregando locais...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="setor">Setor / Departamento</label>
+                                <input type="text" id="setor" name="setor" placeholder="Ex: Financeiro" required>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <footer class="form-footer">
+                        <button type="submit" class="btn btn-primary">Cadastrar Ativo <i data-lucide="arrow-right"></i></button>
+                    </footer>
                 </div>
             </form>
         </div>
@@ -90,4 +101,3 @@
     <script>lucide.createIcons();</script>
 </body>
 </html>
-

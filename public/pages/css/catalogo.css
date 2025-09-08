@@ -1,16 +1,19 @@
 /* ==========================================================================
-   DESIGN SYSTEM V8: CLEAN, BRIGHT & BORDERLESS (CATALOG)
+   DESIGN SYSTEM V8.1: CLEAN, BRIGHT & EDITABLE CATALOG
    ========================================================================== */
 :root {
+    /* Paleta de Cores: Clara, profissional e com alto contraste */
     --color-bg: #f7f8fc;
     --color-surface: #ffffff;
     --color-input-bg: #f0f1f5;
     --color-text-primary: #2d3748;
     --color-text-secondary: #718096;
     --color-text-placeholder: #a0aec0;
-    --color-accent: #3182ce;
+    --color-accent: #3182ce; /* Azul corporativo e acessível */
     --color-accent-hover: #2b6cb0;
     --color-border: #e2e8f0;
+    --color-danger: #e53e3e;
+    --color-danger-bg: #fed7d7;
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
@@ -49,7 +52,7 @@ body {
 .page-header {
     margin-bottom: 2.5rem;
     position: relative;
-    padding-left: 1rem;
+    padding-top: 3.5rem; /* <<< CORREÇÃO APLICADA AQUI */
 }
 
 .back-link {
@@ -57,8 +60,8 @@ body {
     align-items: center;
     gap: 0.4rem;
     position: absolute;
-    top: -0.5rem;
-    left: -1rem;
+    top: 0;
+    left: 0;
     background-color: var(--color-surface);
     color: var(--color-text-secondary);
     text-decoration: none;
@@ -91,6 +94,7 @@ body {
    ========================================================================== */
 .toolbar {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -103,6 +107,7 @@ body {
 
 .search-wrapper {
     flex-grow: 1;
+    min-width: 250px;
 }
 
 .search-wrapper .lucide {
@@ -111,6 +116,7 @@ body {
     color: var(--color-text-placeholder);
     width: 1.25rem;
     height: 1.25rem;
+    pointer-events: none;
 }
 
 #search-input, #filter-tipo {
@@ -245,7 +251,7 @@ body {
 @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* ==========================================================================
-   MODAL DE DETALHES
+   MODAL DE DETALHES E EDIÇÃO
    ========================================================================== */
 .modal-container {
     position: fixed;
@@ -257,6 +263,7 @@ body {
     align-items: center;
     z-index: 1000;
     animation: fadeIn 0.3s forwards;
+    backdrop-filter: blur(5px);
 }
 .modal-container[hidden] { display: none; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -266,12 +273,19 @@ body {
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     position: relative;
-    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+#modal-body {
+    padding: 2.5rem;
+    overflow-y: auto;
+}
 
 .close-modal-btn {
     position: absolute;
@@ -284,6 +298,7 @@ body {
     padding: 0.5rem;
     border-radius: 50%;
     transition: all var(--transition-smooth);
+    z-index: 10;
 }
 .close-modal-btn:hover {
     color: var(--color-danger);
@@ -294,9 +309,11 @@ body {
 .modal-header h2 {
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
+    word-break: break-word;
 }
 .modal-header .type-tag {
     margin-bottom: 1.5rem;
+    display: inline-block;
 }
 
 .detail-grid {
@@ -319,6 +336,7 @@ body {
 }
 .detail-item span {
     font-weight: 500;
+    word-wrap: break-word;
 }
 
 .detail-section-title {
@@ -330,10 +348,68 @@ body {
     border-bottom: 1px solid var(--color-border);
 }
 
-.catalog-main{
-    margin-top: 50px;
+.modal-content .form-group {
+    margin-bottom: 0;
+}
+.modal-content .form-group label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+.modal-content .form-group input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: 1rem;
+    background-color: var(--color-input-bg);
+    color: var(--color-text-primary);
+    transition: all var(--transition-smooth);
+}
+.modal-content .form-group input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-.margin{
-    margin: 10px;
+.modal-actions {
+    padding: 1.5rem 2.5rem;
+    border-top: 1px solid var(--color-border);
+    background-color: #fcfdff;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex-shrink: 0;
 }
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: var(--color-accent-hover);
+}
+
+.btn-secondary {
+    background-color: var(--color-input-bg);
+    color: var(--color-text-primary);
+}
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+}
+

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('form-cadastro-ativo');
     const tipoAtivoSelect = document.getElementById('tipo-ativo');
+    const localSelect = document.getElementById('local');
     
     const secoes = {
         estacao: document.getElementById('form-estacao-trabalho'),
@@ -12,6 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const monitoresContainer = document.getElementById('monitores-container');
     const addMonitorBtn = document.getElementById('add-monitor-btn');
     let monitorCount = 0;
+
+    // --- FUNÇÃO PARA CARREGAR LOCAIS ---
+    const loadLocations = async () => {
+        try {
+            const response = await fetch('/api/locais');
+            const locations = await response.json();
+            localSelect.innerHTML = '<option value="" selected disabled>-- Selecione um local --</option>';
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location.nome;
+                option.textContent = location.nome;
+                localSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Falha ao carregar locais:', error);
+            localSelect.innerHTML = '<option value="">Erro ao carregar locais</option>';
+        }
+    };
 
     // --- LÓGICA PARA EXIBIR FORMULÁRIO CORRETO ---
     tipoAtivoSelect.addEventListener('change', (e) => {
@@ -31,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- LÓGICA PARA ADICIONAR/REMOVER MONITORES ---
     const addMonitorField = () => {
         monitorCount++;
         const monitorId = monitorCount;
@@ -61,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- LÓGICA DE SUBMISSÃO DO FORMULÁRIO ---
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const tipo = tipoAtivoSelect.value;
@@ -119,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     nome: document.getElementById('ativo-nome').value,
                     patrimonio: document.getElementById('ativo-patrimonio').value,
                     serial: document.getElementById('ativo-serial').value,
-                    rfid: document.getElementById('ativo-rfid').value, // RFID coletado aqui
+                    rfid: document.getElementById('ativo-rfid').value,
                     marca_modelo: document.getElementById('ativo-marca').value,
                     local: document.getElementById('local').value,
                     setor: document.getElementById('setor').value,
@@ -148,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Inicia o carregamento dos locais
+    loadLocations();
     lucide.createIcons();
 });
-

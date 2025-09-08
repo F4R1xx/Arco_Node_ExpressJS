@@ -1,35 +1,35 @@
-/* Importar fonte do Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-/* Variáveis CSS para facilitar a manutenção */
+/* ==========================================================================
+   DESIGN SYSTEM V8: CLEAN, BRIGHT & BORDERLESS (DASHBOARD)
+   ========================================================================== */
 :root {
-    --primary-color: #4CAF50; /* Um verde atraente */
-    --secondary-color: #66BB6A; /* Verde mais claro para destaques */
-    --text-color: #333;
-    --light-text-color: #555;
-    --background-color: #f4f7f6;
-    --card-background: #ffffff;
-    --border-color: #e0e0e0;
-    --shadow-light: rgba(0, 0, 0, 0.08);
-    --shadow-hover: rgba(0, 0, 0, 0.15);
-    --transition-speed: 0.3s;
+    --color-bg-light: #f7f8fc;
+    --color-bg-dark: #ffffff;
+    --color-sidebar-bg: #111827; /* Preto/Azul escuro para a sidebar */
+    --color-text-primary: #1f2937;
+    --color-text-secondary: #6b7280;
+    --color-text-light: #f9fafb;
+    --color-text-muted: #9ca3af;
+    --color-accent: #3b82f6; /* Azul vibrante */
+    --color-accent-hover: #60a5fa;
+    --color-border: #e5e7eb;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --border-radius: 12px;
+    --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Reset básico e estilos globais */
-* {
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family: var(--font-family);
+    background-color: var(--color-bg-light);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -37,136 +37,193 @@ a {
     color: inherit;
 }
 
-/* Header */
-.main-header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: #fff;
-    padding: 2.5rem 1rem;
-    text-align: center;
-    box-shadow: 0 4px 10px var(--shadow-light);
-    animation: fadeInDown 0.8s ease-out;
-}
-
-.header-content {
-    max-width: 960px;
-    margin: 0 auto;
-}
-
-.app-title {
-    font-size: 2.8rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-}
-
-.app-tagline {
-    font-size: 1.2rem;
-    font-weight: 300;
-    opacity: 0.9;
-}
-
-/* Main Container */
-.container {
-    flex: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
+/* ==========================================================================
+   LAYOUT PRINCIPAL (SIDEBAR + CONTEÚDO)
+   ========================================================================== */
+.app-layout {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    min-height: 100vh;
 }
 
-/* Grid de Opções */
+/* ==========================================================================
+   BARRA DE NAVEGAÇÃO (SIDEBAR)
+   ========================================================================== */
+.sidebar {
+    width: 260px;
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-text-light);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
+    margin-bottom: 2rem;
+}
+.sidebar-header .logo-icon {
+    color: var(--color-accent);
+}
+.sidebar-header .logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: background-color var(--transition-smooth), color var(--transition-smooth);
+    color: var(--color-text-muted);
+}
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light);
+}
+.nav-item.active {
+    background-color: var(--color-accent);
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+.nav-item .lucide {
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-footer {
+    padding-top: 1.5rem;
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* ==========================================================================
+   CONTEÚDO PRINCIPAL
+   ========================================================================== */
+.main-content {
+    flex-grow: 1;
+    padding: 3rem;
+    overflow-y: auto;
+}
+
+.main-header {
+    margin-bottom: 2.5rem;
+}
+.main-header h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+}
+.main-header p {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+}
+
+.grid-section {
+    margin-bottom: 3rem;
+}
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
 }
 
 .option-card {
-    background-color: var(--card-background);
-    border-radius: 12px;
-    padding: 1.8rem;
-    box-shadow: 0 5px 15px var(--shadow-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-    border: 1px solid var(--border-color);
+    background-color: var(--color-bg-dark);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
-
 .option-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px var(--shadow-hover);
-    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
+}
+.option-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: #f9fafb;
 }
 
 .option-card .icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 1.2rem;
-    color: var(--primary-color);
+    width: 32px;
+    height: 32px;
+    margin-bottom: 1rem;
+    color: var(--color-accent);
 }
-
 .option-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 0.8rem;
-    color: var(--primary-color);
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
     font-weight: 600;
 }
-
 .option-card p {
-    font-size: 0.95rem;
-    color: var(--light-text-color);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
     line-height: 1.5;
 }
 
-/* Footer */
-.main-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1.5rem;
-    margin-top: auto;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.main-footer p {
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-/* Animações */
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+/* ==========================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .main-content {
+        padding: 2rem;
     }
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
-    .main-header {
-        padding: 2rem 1rem;
+    .app-layout {
+        flex-direction: column;
     }
-    .app-title {
-        font-size: 2.2rem;
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
     }
-    .app-tagline {
-        font-size: 1rem;
+    .sidebar-header .logo-text, .sidebar-footer, .nav-item span {
+        display: none; /* Esconde textos em telas pequenas */
     }
-    .container {
-        margin: 1.5rem auto;
-        padding: 0 1rem;
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 0.25rem;
     }
-    .options-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .nav-item {
+        padding: 0.75rem;
+    }
+    .main-content {
+        padding: 1.5rem;
+    }
+    .main-header h1 {
+        font-size: 1.75rem;
     }
 }

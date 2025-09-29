@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Ativos - Arco TI</title>
+    <link rel="stylesheet" href="./css/mapa.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="page-layout">
+        <!-- Barra lateral para listar locais e servir como legenda -->
+        <aside class="sidebar">
+             <a href="/index.html" class="back-link">
+                <i data-lucide="arrow-left"></i>
+                <span>Painel Principal</span>
+            </a>
+            <div class="sidebar-header">
+                <h3>Legenda de Locais</h3>
+                <p>Clique em um local para centralizar no mapa.</p>
+            </div>
+            <div id="locations-legend-list" class="sidebar-content">
+                 <div id="loading-spinner-sidebar" class="spinner-container">
+                    <div class="spinner"></div>
+                </div>
+                <!-- A lista de locais será inserida aqui -->
+            </div>
+        </aside>
+
+        <!-- Área principal do mapa -->
+        <main class="map-area">
+            <div class="map-container-wrapper">
+                <div id="map-container" class="map-container">
+                    <div id="loading-spinner-map" class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                    <!-- Áreas dos locais e marcadores de ativos serão inseridos aqui -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para exibir detalhes do ativo -->
+    <div id="asset-modal" class="modal-container" hidden>
+        <div class="modal-content">
+            <button id="close-modal-btn" class="close-modal-btn"><i data-lucide="x"></i></button>
+            <div id="modal-body">
+                <!-- O conteúdo do ativo será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/mapa.js"></script>
+</body>
+</html>
+

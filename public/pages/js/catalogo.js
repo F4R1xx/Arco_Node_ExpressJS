@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="form-group"><label for="edit-serial">Serial</label><input type="text" id="edit-serial" value="${v(asset.serial)}"></div>
                     <div class="form-group"><label for="edit-rfid">RFID</label><input type="text" id="edit-rfid" value="${v(asset.rfid)}"></div>
                     <div class="form-group"><label for="edit-marca">Marca/Modelo</label><input type="text" id="edit-marca" value="${v(asset.marca_modelo)}"></div>
-                    <div class="form-group"><label for="edit-local">Local</label><input type="text" id="edit-local" value="${v(asset.local)}"></div>
                     <div class="form-group"><label for="edit-setor">Setor</label><input type="text" id="edit-setor" value="${v(asset.setor)}"></div>
                 </div>
                 ${asset.tipo === 'Telefone' ? `

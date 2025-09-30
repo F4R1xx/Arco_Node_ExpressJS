@@ -23,6 +23,7 @@
             </header>
 
             <form id="form-cadastro-ativo">
+                <!-- Seção Tipo de Ativo -->
                 <fieldset class="form-section">
                     <legend>Tipo de Ativo</legend>
                     <div class="form-group">
@@ -37,57 +38,37 @@
                     </div>
                 </fieldset>
 
+                <!-- Seção Dinâmica: Estação de Trabalho -->
                 <div id="form-estacao-trabalho" class="form-secoes-dinamicas" hidden>
-                    <fieldset class="form-section">
-                        <legend>Computador</legend>
-                        <div class="fields-grid two-columns">
-                            <div class="form-group"><label for="comp-nome">Nome do Computador</label><input type="text" id="comp-nome" name="comp-nome" placeholder="Ex: NTB-FIN-0123"></div>
-                            <div class="form-group"><label for="comp-serial">Serial Number</label><input type="text" id="comp-serial" name="comp-serial" placeholder="Ex: SN-987654321"></div>
-                            <div class="form-group"><label for="comp-patrimonio">Patrimônio</label><input type="text" id="comp-patrimonio" name="comp-patrimonio" placeholder="Ex: 123456"></div>
-                            <div class="form-group"><label for="comp-rfid">RFID</label><input type="text" id="comp-rfid" name="comp-rfid" placeholder="Ex: A1B2C3D4E5"></div>
-                            <div class="form-group full-width"><label for="comp-marca">Marca / Modelo</label><input type="text" id="comp-marca" name="comp-marca" placeholder="Ex: Dell Latitude 5420"></div>
-                        </div>
-                    </fieldset>
+                    <fieldset class="form-section"><legend>Computador</legend><div class="fields-grid two-columns"><div class="form-group"><label for="comp-nome">Nome do Computador</label><input type="text" id="comp-nome" name="comp-nome" placeholder="Ex: NTB-FIN-0123"></div><div class="form-group"><label for="comp-serial">Serial Number</label><input type="text" id="comp-serial" name="comp-serial" placeholder="Ex: SN-987654321"></div><div class="form-group"><label for="comp-patrimonio">Patrimônio</label><input type="text" id="comp-patrimonio" name="comp-patrimonio" placeholder="Ex: 123456"></div><div class="form-group"><label for="comp-rfid">RFID</label><input type="text" id="comp-rfid" name="comp-rfid" placeholder="Ex: A1B2C3D4E5"></div><div class="form-group full-width"><label for="comp-marca">Marca / Modelo</label><input type="text" id="comp-marca" name="comp-marca" placeholder="Ex: Dell Latitude 5420"></div></div></fieldset>
                     <fieldset class="form-section"><legend>Monitores</legend><div id="monitores-container"></div><button type="button" id="add-monitor-btn" class="btn btn-secondary"><i data-lucide="plus"></i> Adicionar Monitor</button></fieldset>
                     <fieldset class="form-section"><legend>Periféricos Inclusos</legend><div class="perifericos-grid"><div class="checkbox-tag"><input type="checkbox" id="teclado" name="teclado"><label for="teclado"><i data-lucide="keyboard"></i>Teclado</label></div><div class="checkbox-tag"><input type="checkbox" id="mouse" name="mouse"><label for="mouse"><i data-lucide="mouse"></i>Mouse</label></div><div class="checkbox-tag"><input type="checkbox" id="headset" name="headset"><label for="headset"><i data-lucide="headphones"></i>Headset</label></div><div class="checkbox-tag"><input type="checkbox" id="mousepad" name="mousepad"><label for="mousepad"><i data-lucide="square"></i>Mousepad</label></div><div class="checkbox-tag"><input type="checkbox" id="suporte-headset" name="suporte-headset"><label for="suporte-headset"><i data-lucide="anchor"></i>Suporte</label></div><div class="checkbox-tag"><input type="checkbox" id="webcam" name="webcam"><label for="webcam"><i data-lucide="video"></i>Webcam</label></div></div></fieldset>
                 </div>
                 
+                <!-- Seção Dinâmica: Outros Ativos -->
                 <div id="form-outro-ativo" class="form-secoes-dinamicas" hidden>
-                    <fieldset class="form-section">
-                        <legend>Detalhes do Ativo</legend>
-                        <div class="fields-grid two-columns">
-                            <div class="form-group"><label for="ativo-nome">Nome / Identificador</label><input type="text" id="ativo-nome" name="ativo-nome"></div>
-                            <div class="form-group"><label for="ativo-patrimonio">Patrimônio</label><input type="text" id="ativo-patrimonio" name="ativo-patrimonio"></div>
-                            <div class="form-group"><label for="ativo-serial">Serial Number</label><input type="text" id="ativo-serial" name="ativo-serial"></div>
-                            <div class="form-group"><label for="ativo-rfid">RFID</label><input type="text" id="ativo-rfid" name="ativo-rfid"></div>
-                            <div class="form-group full-width"><label for="ativo-marca">Marca / Modelo</label><input type="text" id="ativo-marca" name="ativo-marca"></div>
-                        </div>
-                    </fieldset>
-                    
-                    <fieldset class="form-section" id="secao-extra-telefone" hidden>
-                        <legend>Dados Específicos de Telefone</legend>
-                        <div class="fields-grid two-columns">
-                            <div class="form-group"><label for="telefone-imei">IMEI</label><input type="text" id="telefone-imei" name="telefone-imei"></div>
-                            <div class="form-group"><label for="telefone-ramal">Ramal</label><input type="text" id="telefone-ramal" name="telefone-ramal"></div>
-                        </div>
-                    </fieldset>
+                    <fieldset class="form-section"><legend>Detalhes do Ativo</legend><div class="fields-grid two-columns"><div class="form-group"><label for="ativo-nome">Nome / Identificador</label><input type="text" id="ativo-nome" name="ativo-nome"></div><div class="form-group"><label for="ativo-patrimonio">Patrimônio</label><input type="text" id="ativo-patrimonio" name="ativo-patrimonio"></div><div class="form-group"><label for="ativo-serial">Serial Number</label><input type="text" id="ativo-serial" name="ativo-serial"></div><div class="form-group"><label for="ativo-rfid">RFID</label><input type="text" id="ativo-rfid" name="ativo-rfid"></div><div class="form-group full-width"><label for="ativo-marca">Marca / Modelo</label><input type="text" id="ativo-marca" name="ativo-marca"></div></div></fieldset>
+                    <fieldset class="form-section" id="secao-extra-telefone" hidden><legend>Dados Específicos de Telefone</legend><div class="fields-grid two-columns"><div class="form-group"><label for="telefone-imei">IMEI</label><input type="text" id="telefone-imei" name="telefone-imei"></div><div class="form-group"><label for="telefone-ramal">Ramal</label><input type="text" id="telefone-ramal" name="telefone-ramal"></div></div></fieldset>
                 </div>
 
+                <!-- Seção Localização (ATUALIZADA) -->
                 <div id="form-localizacao" class="form-secoes-dinamicas" hidden>
                     <fieldset class="form-section">
                         <legend>Localização</legend>
                         <div class="fields-grid two-columns">
-                            <div class="form-group">
-                                <label for="local">Prédio / Unidade</label>
-                                <select id="local" name="local" required>
-                                    <option value="">Carregando locais...</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="setor">Setor / Departamento</label>
-                                <input type="text" id="setor" name="setor" placeholder="Ex: Financeiro" required>
+                            <div class="form-group"><label for="local">Prédio / Unidade</label><select id="local" name="local"><option value="">Carregando locais...</option></select></div>
+                            <div class="form-group"><label for="setor">Setor / Departamento</label><input type="text" id="setor" name="setor" placeholder="Ex: Financeiro"></div>
+                        </div>
+                        <div class="location-picker-wrapper">
+                            <button type="button" id="open-map-modal-btn" class="btn btn-secondary"><i data-lucide="map-pin"></i> Definir Posição no Mapa</button>
+                            <div class="checkbox-tag">
+                                <input type="checkbox" id="free-placement-toggle" name="free-placement-toggle">
+                                <label for="free-placement-toggle"><i data-lucide="move"></i> Posicionamento Livre</label>
                             </div>
                         </div>
+                         <span id="coords-status" class="coords-status">Nenhuma posição definida.</span>
+                        <input type="hidden" id="coord-x" name="coord-x">
+                        <input type="hidden" id="coord-y" name="coord-y">
                     </fieldset>
                     <footer class="form-footer">
                         <button type="submit" class="btn btn-primary">Cadastrar Ativo <i data-lucide="arrow-right"></i></button>
@@ -97,7 +78,27 @@
         </div>
     </main>
     
+    <!-- Modal do Mapa (Existente) -->
+    <div id="map-selection-modal" class="map-modal" hidden>
+        <div class="map-modal-content">
+            <header class="map-modal-header">
+                <h3>Selecione a Posição do Ativo</h3>
+                <p>Clique no mapa para definir a localização exata.</p>
+                <button type="button" id="close-map-modal-btn" class="close-map-modal-btn"><i data-lucide="x"></i></button>
+            </header>
+            <div id="map-modal-body" class="map-modal-body">
+                <div id="map-background" class="map-background">
+                    <!-- Áreas e marcadores serão injetados aqui via JS -->
+                </div>
+            </div>
+            <footer class="map-modal-footer">
+                <span id="map-modal-message">Selecione um local para começar.</span>
+            </footer>
+        </div>
+    </div>
+
     <script src="./js/cadastro.js"></script>
     <script>lucide.createIcons();</script>
 </body>
 </html>
+

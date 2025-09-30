@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const mapWrapper = document.querySelector('.map-container-wrapper');
     const mapContainer = document.getElementById('map-container');
-    // Variáveis dos spinners corrigidas para corresponder aos IDs no HTML
     const loadingSpinnerMap = document.getElementById('loading-spinner-map'); 
     const loadingSpinnerSidebar = document.getElementById('loading-spinner-sidebar');
     
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let allLocations = [];
     let allAssets = [];
     
-    // Estado do mapa
     let transform = { scale: 1, translateX: 0, translateY: 0 };
     let isPanning = false;
     let startPan = { x: 0, y: 0 };
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const fetchAllData = async () => {
-        // Mostra ambos os spinners no início
         if(loadingSpinnerMap) loadingSpinnerMap.hidden = false;
         if(loadingSpinnerSidebar) loadingSpinnerSidebar.hidden = false;
 
@@ -61,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao buscar dados:', error);
             if(mapContainer) mapContainer.innerHTML = `<p>${error.message}</p>`;
         } finally {
-            // Esconde ambos os spinners no final
             if(loadingSpinnerMap) loadingSpinnerMap.hidden = true;
             if(loadingSpinnerSidebar) loadingSpinnerSidebar.hidden = true;
         }
@@ -69,9 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderMap = () => {
         if (!mapContainer) return;
-        mapContainer.innerHTML = ''; // Limpa o mapa
+        mapContainer.innerHTML = ''; 
 
-        // 1. Desenha as áreas dos locais
         allLocations.forEach(loc => {
             if (loc.coords_json) {
                 const coords = JSON.parse(loc.coords_json);
@@ -85,28 +80,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 2. Desenha os marcadores de ativos
         allAssets.forEach(asset => {
-            let location = allLocations.find(loc => loc.nome === asset.setor);
-            if (!location) {
-                 location = allLocations.find(loc => loc.nome === asset.local);
+            // REQUERIMENTO 2: Não mostrar monitores (ou qualquer ativo filho) no mapa
+            if (asset.ativo_pai_id) {
+                return;
             }
 
-            if (location && location.coords_json) {
-                const coords = JSON.parse(location.coords_json);
-                const assetX = coords.x + Math.random() * coords.width;
-                const assetY = coords.y + Math.random() * coords.height;
+            const marker = document.createElement('div');
+            const typeClass = asset.tipo.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '');
+            marker.className = `asset-marker marker-${typeClass || 'default'}`;
+            marker.title = asset.nome_ativo || asset.tipo;
 
-                const marker = document.createElement('div');
-                const typeClass = asset.tipo.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '');
-                marker.className = `asset-marker marker-${typeClass || 'default'}`;
-                marker.style.left = `${assetX}px`;
-                marker.style.top = `${assetY}px`;
-                marker.title = asset.nome_ativo || asset.tipo;
-
-                marker.addEventListener('click', () => showAssetModal(asset));
-                mapContainer.appendChild(marker);
+            // REQUERIMENTO 1: Usar coordenadas exatas se existirem
+            if (asset.coords_json) {
+                const assetCoords = JSON.parse(asset.coords_json);
+                marker.style.left = `${assetCoords.x}px`;
+                marker.style.top = `${assetCoords.y}px`;
+            } else {
+                // Fallback: posicionamento aleatório dentro do setor (comportamento antigo)
+                const location = allLocations.find(loc => loc.nome === asset.setor || loc.nome === asset.local);
+                if (location && location.coords_json) {
+                    const coords = JSON.parse(location.coords_json);
+                    marker.style.left = `${coords.x + Math.random() * coords.width}px`;
+                    marker.style.top = `${coords.y + Math.random() * coords.height}px`;
+                } else {
+                    return; // Não é possível posicionar se não tiver nem coords exatas nem um local válido
+                }
             }
+
+            marker.addEventListener('click', () => showAssetModal(asset));
+            mapContainer.appendChild(marker);
         });
     };
 
@@ -127,19 +130,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const centerOnLocation = (location) => {
         if (!location.coords_json) return;
         const coords = JSON.parse(location.coords_json);
-
         transform.scale = 1.5;
         const centerX = coords.x + coords.width / 2;
         const centerY = coords.y + coords.height / 2;
-        
         transform.translateX = (mapWrapper.clientWidth / 2) - (centerX * transform.scale);
         transform.translateY = (mapWrapper.clientHeight / 2) - (centerY * transform.scale);
-        
         applyTransform();
     };
 
     const showAssetModal = (asset) => {
+        // Encontra os monitores filhos desta estação
+        const childMonitors = allAssets.filter(a => a.ativo_pai_id === asset.id);
         const dados = JSON.parse(asset.dados_especificos || '{}');
+
         let detailsHtml = `
             <div class="modal-header"><h2>${asset.nome_ativo || asset.tipo}</h2></div>
             <div class="detail-grid">
@@ -153,20 +156,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${dados.ramal ? `<div class="detail-item"><strong>Ramal</strong><span>${dados.ramal}</span></div>` : ''}
             </div>
         `;
+        
+        if (childMonitors.length > 0) {
+            detailsHtml += `<h4>Monitores Vinculados</h4>`;
+            childMonitors.forEach(monitor => {
+                detailsHtml += `<div class="detail-grid nested">${monitor.patrimonio ? `<div class="detail-item"><strong>Patrimônio</strong><span>${monitor.patrimonio}</span></div>` : ''}${monitor.marca_modelo ? `<div class="detail-item"><strong>Marca/Modelo</strong><span>${monitor.marca_modelo}</span></div>` : ''}</div>`;
+            });
+        }
+
         modalBody.innerHTML = detailsHtml;
         modal.hidden = false;
         lucide.createIcons();
     };
 
-    // --- Event Listeners para Pan/Zoom e Modal ---
     if (mapWrapper) {
-        mapWrapper.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            isPanning = true;
-            startPan = { x: e.clientX - transform.translateX, y: e.clientY - transform.translateY };
-            mapWrapper.style.cursor = 'grabbing';
-        });
-
+        mapWrapper.addEventListener('mousedown', (e) => { e.preventDefault(); isPanning = true; startPan = { x: e.clientX - transform.translateX, y: e.clientY - transform.translateY }; mapWrapper.style.cursor = 'grabbing'; });
         mapWrapper.addEventListener('wheel', (e) => {
             e.preventDefault();
             const rect = mapWrapper.getBoundingClientRect();
@@ -174,38 +178,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const mouseY = e.clientY - rect.top;
             const zoomFactor = 1.1;
             const oldScale = transform.scale;
-            
-            if (e.deltaY < 0) { transform.scale *= zoomFactor; } 
-            else { transform.scale /= zoomFactor; }
+            if (e.deltaY < 0) { transform.scale *= zoomFactor; } else { transform.scale /= zoomFactor; }
             transform.scale = Math.min(Math.max(0.1, transform.scale), 5);
-
             transform.translateX = mouseX - (mouseX - transform.translateX) * (transform.scale / oldScale);
             transform.translateY = mouseY - (mouseY - transform.translateY) * (transform.scale / oldScale);
             applyTransform();
         });
     }
 
-    window.addEventListener('mouseup', () => {
-        isPanning = false;
-        if (mapWrapper) mapWrapper.style.cursor = 'grab';
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        if (!isPanning) return;
-        e.preventDefault();
-        transform.translateX = e.clientX - startPan.x;
-        transform.translateY = e.clientY - startPan.y;
-        applyTransform();
-    });
-
+    window.addEventListener('mouseup', () => { isPanning = false; if (mapWrapper) mapWrapper.style.cursor = 'grab'; });
+    window.addEventListener('mousemove', (e) => { if (!isPanning) return; e.preventDefault(); transform.translateX = e.clientX - startPan.x; transform.translateY = e.clientY - startPan.y; applyTransform(); });
     if (closeModalBtn) closeModalBtn.addEventListener('click', () => modal.hidden = true);
-    if (modal) modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.hidden = true;
-    });
+    if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.hidden = true; });
 
-    // --- Inicialização ---
     setInitialView();
     fetchAllData();
     lucide.createIcons();
 });
-

@@ -6,6 +6,8 @@
     --color-text-secondary: #718096;
     --color-accent: #3182ce;
     --color-border: #e2e8f0;
+    --color-success: #22c55e;
+    --color-danger: #ef4444;
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
@@ -13,71 +15,49 @@
     --border-radius-lg: 24px;
     --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-    /* Cores dos Ativos */
-    --color-estacao: #3b82f6; /* Azul */
-    --color-telefone: #22c55e; /* Verde */
-    --color-camera: #ef4444; /* Vermelho */
-    --color-switch: #8b5cf6; /* Roxo */
-    --color-monitor: #64748b; /* Cinza */
-    --color-default: #f97316; /* Laranja */
+    --color-estacao: #3b82f6; --color-telefone: #22c55e; --color-camera: #ef4444; --color-switch: #8b5cf6; --color-monitor: #64748b; --color-default: #f97316;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-family); background-color: var(--color-bg); color: var(--color-text-primary); -webkit-font-smoothing: antialiased; overflow: hidden; }
-
 .page-layout { display: flex; height: 100vh; }
-
 .sidebar { width: 320px; flex-shrink: 0; background-color: var(--color-surface); border-right: 1px solid var(--color-border); display: flex; flex-direction: column; height: 100%; z-index: 10; padding: 1.5rem; }
 .sidebar-header { border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; margin-bottom: 1rem;}
 .sidebar-header h3 { font-size: 1.25rem; font-weight: 700; }
 .sidebar-header p { color: var(--color-text-secondary); font-size: 0.9rem; }
 .sidebar-content { overflow-y: auto; flex-grow: 1; }
-
 .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--color-text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 9999px; transition: all var(--transition-smooth); margin-bottom: 1.5rem; background-color: var(--color-bg); }
 .back-link:hover { background-color: #e9eef5; color: var(--color-text-primary); }
-
 .location-legend-item { padding: 0.75rem 1rem; border-radius: var(--border-radius-md); cursor: pointer; transition: background-color var(--transition-smooth); font-weight: 500;}
 .location-legend-item:hover { background-color: var(--color-border); }
-
 .map-area { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; }
 .map-container-wrapper { flex-grow: 1; background-color: var(--color-surface); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; position: relative; cursor: grab; margin: 1.5rem; }
 .map-container-wrapper:active { cursor: grabbing; }
-
-.map-container {
-    width: 1920px;
-    height: 1080px;
-    background-image: url('/MapaSarah.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top left;
-    position: relative;
-    transform-origin: 0 0;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.location-area {
-    position: absolute;
-    background-color: rgba(49, 130, 206, 0.05);
-    border: 1px solid rgba(49, 130, 206, 0.2);
-    pointer-events: none;
-}
+.map-container { width: 1920px; height: 1080px; background-image: url('/MapaSarah.png'); background-size: contain; background-repeat: no-repeat; background-position: top left; position: relative; transform-origin: 0 0; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+.location-area { position: absolute; background-color: rgba(49, 130, 206, 0.05); border: 1px solid rgba(49, 130, 206, 0.2); pointer-events: none; }
 
 .asset-marker {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid white;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: absolute; width: 14px; height: 14px; border-radius: 50%;
+    /* ATUALIZADO: Borda padrão mais grossa e cinza */
+    border: 3px solid #94a3b8; 
+    cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-    z-index: 5;
+    z-index: 5; transform: translate(-50%, -50%);
 }
-.asset-marker:hover {
-    transform: scale(1.6);
-    z-index: 6;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+.asset-marker:hover { transform: translate(-50%, -50%) scale(1.6); z-index: 6; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+
+/* NOVAS REGRAS DE STATUS PARA O MARCADOR */
+.asset-marker.status-online {
+    border-color: var(--color-success);
+    animation: pulse 2s infinite;
+}
+.asset-marker.status-offline {
+    border-color: var(--color-danger);
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 .marker-estacao-de-trabalho { background-color: var(--color-estacao); }
@@ -87,13 +67,12 @@ body { font-family: var(--font-family); background-color: var(--color-bg); color
 .marker-monitor { background-color: var(--color-monitor); }
 .marker-default { background-color: var(--color-default); }
 
+/* (Estilos do modal e spinner permanecem os mesmos, mas adicionamos estilos do ping-status) */
 .modal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); animation: fadeIn 0.3s forwards; }
 .modal-container[hidden] { display: none; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
 .modal-content { background: var(--color-surface); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); width: 90%; max-width: 600px; position: relative; max-height: 90vh; display: flex; flex-direction: column; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
 #modal-body { padding: 2.5rem; overflow-y: auto; }
 .close-modal-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.5rem; border-radius: 50%; transition: all var(--transition-smooth); z-index: 10; }
 .close-modal-btn:hover { color: #e53e3e; background-color: #fed7d7; transform: rotate(90deg); }
@@ -101,8 +80,22 @@ body { font-family: var(--font-family); background-color: var(--color-bg); color
 .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
 .detail-item strong { display: block; font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 0.25rem; text-transform: uppercase; }
 .detail-item span { font-weight: 500; word-wrap: break-word; }
-
 .spinner-container { display: flex; justify-content: center; align-items: center; width: 100%; padding: 2rem 0; }
 .spinner { width: 48px; height: 48px; border: 5px solid var(--color-border); border-bottom-color: var(--color-accent); border-radius: 50%; animation: rotation 1s linear infinite; }
 @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Estilos de Ping (copiados do catalogo.css para consistência) */
+.detail-section-title { font-size: 1rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); }
+.ping-status-container { background: var(--color-bg); padding: 1.5rem; border-radius: var(--border-radius-md); display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem; }
+.ping-status-display { display: flex; align-items: center; gap: 0.75rem; width: 100%; }
+.status-indicator { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.status-indicator.online { background-color: var(--color-success); }
+.status-indicator.offline { background-color: var(--color-danger); }
+.status-indicator.unknown { background-color: var(--color-text-secondary); }
+.status-text strong { display: block; font-size: 1rem; }
+.status-text span { font-size: 0.8rem; color: var(--color-text-secondary); }
+#ping-btn { width: 100%; padding: 0.75rem 1.5rem; border: none; border-radius: var(--border-radius-md); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all var(--transition-smooth); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: #e2e8f0; color: var(--color-text-primary); }
+#ping-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+#ping-btn .spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
